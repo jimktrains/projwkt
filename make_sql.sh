@@ -31,14 +31,10 @@ fi
 
 wkt=`cat $base.prj`
 
-# Get the directory this and my fellow scripts
-# are in, and then convert the WKT to PROJ4
-mydir=`dirname $0`
-if [ -z $mydir ]; then
-    mydir=`which $0`
-    mydir=`dirname $mydir`
-fi
-prj4=`cat $base.prj | python $mydir/wkt2proj.py`
+# Get the proj4 text for the WKT
+prj4=`gdalsrsinfo $base.prj | grep PROJ | awk -F \' '{ print $2}' `
+echo $prj4
+exit
 
 # If there was an error, then :(
 if [ $? -ne 0 ]; then
